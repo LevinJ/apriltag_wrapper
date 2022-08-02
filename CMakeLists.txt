@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 project(apriltag VERSION 3.2.0 LANGUAGES C CXX)
 
+set(CMAKE_BUILD_TYPE "Debug")
+
 if(POLICY CMP0077)
     cmake_policy(SET CMP0077 NEW)
 endif()
@@ -166,9 +168,11 @@ target_link_libraries(apriltag_demo ${PROJECT_NAME})
 # opencv_demo
 # NB: contrib required for TickMeter in OpenCV 2.4. This is only required for 16.04 backwards compatibility and can be removed in the future.
 find_package(OpenCV COMPONENTS core imgproc videoio highgui contrib QUIET)
+find_package(OpenCV  REQUIRED)
 if(OpenCV_FOUND)
+	include_directories(${OpenCV_INCLUDE_DIRS})
     add_executable(opencv_demo example/opencv_demo.cc)
-    target_link_libraries(opencv_demo apriltag ${OpenCV_LIBRARIES})
+    target_link_libraries(opencv_demo apriltag ${OpenCV_LIBS})
     set_target_properties(opencv_demo PROPERTIES CXX_STANDARD 11)
     install(TARGETS opencv_demo RUNTIME DESTINATION bin)
 else()

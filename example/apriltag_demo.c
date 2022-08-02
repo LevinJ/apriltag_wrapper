@@ -50,6 +50,7 @@ either expressed or implied, of the Regents of The University of Michigan.
 #include "tagCustom48h12.h"
 #include "tagStandard41h12.h"
 #include "tagStandard52h13.h"
+#include "tag36h9.h"
 
 #include "common/getopt.h"
 #include "common/image_u8.h"
@@ -85,7 +86,9 @@ int main(int argc, char *argv[])
     const char *famname = getopt_get_string(getopt, "family");
     if (!strcmp(famname, "tag36h11")) {
         tf = tag36h11_create();
-    } else if (!strcmp(famname, "tag25h9")) {
+    }else if (!strcmp(famname, "tag36h9")){
+    	tf = tag36h9_create();
+    }else if (!strcmp(famname, "tag25h9")) {
         tf = tag25h9_create();
     } else if (!strcmp(famname, "tag16h5")) {
         tf = tag16h5_create();
