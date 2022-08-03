@@ -43,7 +43,7 @@ set(APRILTAG_SRCS apriltag.c apriltag_pose.c apriltag_quad_thresh.c)
 
 # Library
 file(GLOB TAG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/tag*.c)
-add_library(${PROJECT_NAME} ${APRILTAG_SRCS} ${COMMON_SRC} ${TAG_FILES})
+add_library(${PROJECT_NAME} ${APRILTAG_SRCS} ${COMMON_SRC} ${TAG_FILES} AprilTagWrapper.cpp)
 
 if (MSVC)
     add_compile_definitions("_CRT_SECURE_NO_WARNINGS")
@@ -162,13 +162,15 @@ endif (NOT Python3_NOT_FOUND AND NOT Numpy_NOT_FOUND AND PYTHONLIBS_FOUND AND BU
 
 # Examples
 # apriltag_demo
+find_package(OpenCV  REQUIRED)
+
 add_executable(apriltag_demo example/apriltag_demo.c)
-target_link_libraries(apriltag_demo ${PROJECT_NAME})
+target_link_libraries(apriltag_demo ${PROJECT_NAME} ${OpenCV_LIBS})
 
 # opencv_demo
 # NB: contrib required for TickMeter in OpenCV 2.4. This is only required for 16.04 backwards compatibility and can be removed in the future.
-find_package(OpenCV COMPONENTS core imgproc videoio highgui contrib QUIET)
-find_package(OpenCV  REQUIRED)
+#find_package(OpenCV COMPONENTS core imgproc videoio highgui contrib QUIET)
+
 if(OpenCV_FOUND)
 	include_directories(${OpenCV_INCLUDE_DIRS})
     add_executable(opencv_demo example/opencv_demo.cc)
@@ -178,6 +180,9 @@ if(OpenCV_FOUND)
 else()
     message(WARNING "OpenCV not found: Not building demo")
 endif(OpenCV_FOUND)
+
+#wrapper test
+add_subdirectory(example)
 
 # install example programs
 install(TARGETS apriltag_demo RUNTIME DESTINATION bin)
